@@ -78,12 +78,16 @@ import com.sp4c3.exohabit.ui.theme.openSansFamily
 import com.sp4c3.exohabit.ui.theme.ralewayFamily
 import kotlin.math.sin
 
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+
 val text = listOf("One", "Two", "Three", "Four")
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        installSplashScreen()
+        actionBar?.hide()
         setContent {
             AppTheme {
                 Space()
@@ -387,11 +391,11 @@ fun NavigationButton(nameResource: String, icon: ImageVector, onClick: () -> Uni
 @Composable
 fun Logo() {
     Text(
-        "ExoHabit",
+        "Exo Voyage",
         textAlign = TextAlign.Center,
         color = Color.White,
         style = MaterialTheme.typography.displayLarge,
-        fontSize = 80.sp,
+        fontSize = 72.sp,
         fontFamily = montserratFamily,
         fontWeight = FontWeight.Light
     )

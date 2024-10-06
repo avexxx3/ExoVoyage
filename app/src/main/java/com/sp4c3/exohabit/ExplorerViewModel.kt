@@ -14,7 +14,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
-import java.io.InputStream
 
 
 class ExplorerViewModel : ViewModel() {
@@ -37,7 +36,7 @@ class ExplorerViewModel : ViewModel() {
         }
     }
 
-    private fun falseData() {
+    private fun parsedData() {
         listOfPlanets.add(
             Exoplanet(
                 name = "EPIC 220674823 c",
@@ -1285,13 +1284,13 @@ class ExplorerViewModel : ViewModel() {
         val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                falseData()
+                parsedData()
                 updateUI()
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if(response.body == null) {
-                    falseData()
+                    parsedData()
                     updateUI()
                     return
                 }
@@ -1326,7 +1325,11 @@ class ExplorerViewModel : ViewModel() {
                             }
                         )
                     )
-                
+
+                listOfPlanets.sortBy { it.details.last().detail }
+                listOfPlanets.reverse()
+                listOfPlanets.addAll(listOfPlanets)
+
                 updateUI()
             }
         })
