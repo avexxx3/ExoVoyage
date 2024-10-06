@@ -3,7 +3,7 @@
 # Exo Voyage
 An Android application built in accordance with its [web alternative](https://github.com/stellalphatic/ExoPlanetProject).
 
-Visualizes data regarding the chances of human survivability (habitability) in exoplanets, which has been calculated and stored on a seperate backend according to the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/).
+Visualizes data regarding the chances of human survivability (habitability) in exoplanets, which has been calculated and charted on a seperate backend according to the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/).
 
 If you end up feeling lost, you can avail the assistance of our [ExoVoyageAI](https://chatbot-3.vercel.app/) to guide you through the journey.
 
