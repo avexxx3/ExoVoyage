@@ -1,5 +1,8 @@
 package com.sp4c3.exohabit
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -36,6 +39,7 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -69,6 +73,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sp4c3.exohabit.ui.theme.AppTheme
@@ -76,8 +82,13 @@ import com.sp4c3.exohabit.ui.theme.montserratFamily
 import com.sp4c3.exohabit.ui.theme.ralewayFamily
 import kotlin.math.sin
 
+lateinit var context: Context
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        context = applicationContext
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         installSplashScreen()
@@ -326,12 +337,17 @@ fun MainApp() {
                 Icons.Filled.Search
             ) {
                 currentScreen = Screens.Exoplanets
+            }
 
-                                }
-//            NavigationButton(
-//                "Calculate new ones",
-//                Icons.Filled.Warning
-//            ) { currentScreen = Screens.Creation }
+            NavigationButton(
+                "Consult chatbot",
+                Icons.Filled.Call
+            ) {
+                val intent = Intent(
+                    Intent.ACTION_VIEW, Uri.parse("https://chatbot-3.vercel.app/")
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(context, intent, null)
+            }
             Spacer(modifier = Modifier.weight(1f))
         }
     }
@@ -345,7 +361,10 @@ fun MainApp() {
         else
             LoadingScreen()
     }
+
+
 }
+
 
 @Composable
 fun LoadingScreen() {
@@ -488,4 +507,5 @@ fun Space(
 enum class Screens {
     Home,
     Exoplanets,
+    Webview
 }
