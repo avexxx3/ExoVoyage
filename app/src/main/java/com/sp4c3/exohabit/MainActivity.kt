@@ -75,6 +75,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sp4c3.exohabit.ui.theme.AppTheme
 import com.sp4c3.exohabit.ui.theme.montserratFamily
 import com.sp4c3.exohabit.ui.theme.openSansFamily
+import com.sp4c3.exohabit.ui.theme.ralewayFamily
 import kotlin.math.sin
 
 val text = listOf("One", "Two", "Three", "Four")
@@ -156,6 +157,17 @@ fun ExoplanetCard(planet: Exoplanet) {
                     color = planet.color
                 )
 
+                Text(
+                    "${if (!planet.habitable) "Not " else ""}Habitable",
+                    fontSize = 24.sp,
+                    color = if (planet.habitable) Color.Green else Color.Red,
+                    fontFamily = montserratFamily,
+                    fontWeight = FontWeight.ExtraBold,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp)
+                )
+
                 Spacer(Modifier.weight(1f))
             }
         }
@@ -194,7 +206,9 @@ fun DetailCard(detail: Detail, modifier: Modifier = Modifier, selectDetail: (Det
             )
 
             Text(
-                if(detail.type.unit.isNotEmpty()) "${detail.detail} ${detail.type.unit}" else if(detail.type==Details.Flux) detail.detail.toString() else "${detail.detail * 100}%",
+                if (detail.type.unit.isNotEmpty()) "${"%.2f".format(detail.detail)} ${detail.type.unit}" else if (detail.type == Details.Flux) "%.2f".format(
+                    detail.detail
+                ) else "${"%.2f".format(detail.detail * 100)}%",
                 fontSize = 20.sp,
                 color = Color.White,
                 fontFamily = montserratFamily,
@@ -206,7 +220,7 @@ fun DetailCard(detail: Detail, modifier: Modifier = Modifier, selectDetail: (Det
 
 @Composable
 fun CarouselList(list: List<Exoplanet>, updatePlanet: (PlanetType) -> Unit) {
-    val pagerState = rememberPagerState { list.size }
+    val pagerState = rememberPagerState(list.size/2) { list.size }
     updatePlanet(list[pagerState.currentPage].planetType)
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -238,7 +252,7 @@ fun InfoPopup(detail: Detail, closePrompt: () -> Unit) {
                 .align(Alignment.Center)
                 .fillMaxWidth()
                 .clickable { closePrompt() }
-                .padding(40.dp),
+                .padding(24.dp),
         ) {
             Column(modifier = Modifier.padding(8.dp)) {
                 Row(
@@ -254,23 +268,22 @@ fun InfoPopup(detail: Detail, closePrompt: () -> Unit) {
                     Text(
                         detail.type.name, fontSize = 24.sp,
                         fontFamily = montserratFamily,
-                        color = Color.Black,
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
 
                 Text(
-                    color = Color.Black,
                     fontFamily = montserratFamily,
                     fontWeight = FontWeight.ExtraBold,
                     modifier = Modifier.padding(2.dp),
                     fontSize = 20.sp,
-                    text = if(detail.type.unit.isNotEmpty()) "${detail.detail} ${detail.type.unit}" else if(detail.type==Details.Flux) detail.detail.toString() else "${detail.detail * 100}%"  )
+                    text = if (detail.type.unit.isNotEmpty()) "${detail.detail} ${detail.type.unit}" else if (detail.type == Details.Flux) detail.detail.toString() else "${detail.detail * 100}%"
+                )
 
                 Text(
                     modifier = Modifier.padding(horizontal = 2.dp),
                     text = detail.type.explanation,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
             }
@@ -316,18 +329,35 @@ fun MainApp() {
             ) {
                 currentScreen = Screens.Exoplanets
 
-            }
-            NavigationButton(
-                "Calculate new ones",
-                Icons.Filled.Warning
-            ) { currentScreen = Screens.Creation }
+                                }
+//            NavigationButton(
+//                "Calculate new ones",
+//                Icons.Filled.Warning
+//            ) { currentScreen = Screens.Creation }
             Spacer(modifier = Modifier.weight(1f))
         }
     }
 
     //Sliding cards
+    val uiState by explorerViewModel.uiState.collectAsState()
+
     AnimatedVisibility(currentScreen == Screens.Exoplanets, enter = fadeIn(), exit = fadeOut()) {
-        CarouselList(explorerViewModel.listOfPlanets) { planet = it }
+        if (uiState.listOfPlanets.isNotEmpty())
+            CarouselList(uiState.listOfPlanets) { planet = it }
+        else
+            LoadingScreen()
+    }
+}
+
+@Composable
+fun LoadingScreen() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            "Loading...",
+            color = Color.White,
+            fontFamily = ralewayFamily,
+            style = MaterialTheme.typography.headlineMedium
+        )
     }
 }
 
@@ -432,7 +462,7 @@ fun Space(
 
         val stars = remember {
             buildList {
-                repeat(750) {
+                repeat(1000) {
                     val x = (Math.random() * width).toFloat()
                     val y = (Math.random() * height).toFloat()
                     val alpha = (Math.random() * 2.0 * Math.PI).toFloat()
