@@ -9,7 +9,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -39,7 +38,6 @@ import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -71,16 +69,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sp4c3.exohabit.ui.theme.AppTheme
 import com.sp4c3.exohabit.ui.theme.montserratFamily
-import com.sp4c3.exohabit.ui.theme.openSansFamily
 import com.sp4c3.exohabit.ui.theme.ralewayFamily
 import kotlin.math.sin
-
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-
-val text = listOf("One", "Two", "Three", "Four")
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -491,8 +485,7 @@ fun Space(
     }
 }
 
-enum class Screens(route: String) {
-    Home("home"),
-    Exoplanets("exoplanets"),
-    Creation("creation")
+enum class Screens {
+    Home,
+    Exoplanets,
 }
